@@ -2,6 +2,16 @@
 import sys
 sys.path.append("/media/saumil/Extra_Linux/818B/blender_depth")
 from image import *
+
+sys.path.append('/usr/lib/python3.7')
+sys.path.append('/usr/lib/python3.7/lib-dynload')
+sys.path.append('/home/saumil/.local/lib/python3.7/site-packages') 
+sys.path.append('/usr/local/lib/python3.7/dist-packages')
+sys.path.append('/usr/lib/python3/dist-packages')
+sys.path.append('/usr/local/lib/python3.7/dist-packages/tensorflow/python/keras/api/_v1') 
+sys.path.append('/usr/local/lib/python3.7/dist-packages/tensorflow_estimator/python/estimator/api/_v1')
+sys.path.append('/usr/local/lib/python3.7/dist-packages/tensorflow') 
+sys.path.append('/usr/local/lib/python3.7/dist-packages/tensorflow/_api/v1')
 '''
 import bpy,sys
 
@@ -15,43 +25,13 @@ import bmesh
 from mathutils import *
 import os
 import numpy as np
+from blender_utils import *
 
 def delete_cube():
 	bpy.ops.object.select_all(action='DESELECT')
 	# bpy.data.objects['Camera'].select = True    # Blender 2.7x
 	bpy.data.objects['Cube'].select_set(True) # Blender 2.8x
 	bpy.ops.object.delete() 
-
-def set_nodes():
-	# Setting Outfile node
-	bpy.context.scene.use_nodes = True
-	nodes = bpy.context.scene.node_tree.nodes
-	outfile = nodes.new("CompositorNodeOutputFile")
-	outfile.base_path = "Output path here"  ### Working
-	bpy.data.scenes["Scene"].node_tree.nodes['File Output'].format.file_format = 'OPEN_EXR'
-	outfile.layer_slots.new("Flow")
-
-def connect_nodes():
-	### Connect nodes
-	##### https://devtalk.blender.org/t/how-to-connect-nodes-using-script-commands/11567
-	node_tree = bpy.data.scenes["Scene"].node_tree
-	dep = node_tree.nodes['Render Layers'].outputs['Depth']
-	vec = node_tree.nodes['Render Layers'].outputs['Vector']
-	dep2 = node_tree.nodes['File Output'].inputs[0]
-	vec2 = node_tree.nodes['File Output'].inputs[1]
-	node_tree.links.new(dep, dep2)
-	node_tree.links.new(vec, vec2)
-
-def render_and_save(path_dir, i):
-	# path_dir = "/media/saumil/Extra_Linux/" #save for restore
-	nodes = bpy.context.scene.node_tree.nodes
-	os.mkdir(path_dir+str(i)+"/")
-	for cam in [obj for obj in bpy.data.objects if obj.type == 'CAMERA']:
-	    bpy.context.scene.camera = cam
-	    bpy.context.scene.render.filepath = os.path.join(path_dir +str(i)+"/", cam.name)
-	    nodes['File Output'].base_path = path_dir + str(i) + "/" 
-	    bpy.ops.render.render(write_still=True)
-	    bpy.context.scene.render.filepath = path_dir + str(i)+"/"
 
 def assign_material(image_path, ob):
 	mat = bpy.data.materials.new(name=ob.name+"_material")
