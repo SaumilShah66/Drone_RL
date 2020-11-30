@@ -73,7 +73,7 @@ def get_output_folder(args, parent_dir, env_name, task_name):
     os.makedirs(parent_dir+'/losses/')
     return parent_dir
 
-def main():
+def run_rl():
     parser = argparse.ArgumentParser(description='Run DQN on Atari Breakout')
     # parser.add_argument('--env', default='QuadCopter-v4', help='Atari env name')
     parser.add_argument('-o', '--output', default='/home/saumil/RL_exp/log/', help='Directory to save data to')
@@ -138,4 +138,4 @@ def main():
         dqn.evaluate(env, args.num_episodes_at_test, 0, args.max_episode_length, args.monitor)
 
 if __name__ == '__main__':
-    main()
+    run_rl()

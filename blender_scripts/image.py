@@ -29,7 +29,6 @@ from blender_utils import *
 
 def delete_cube():
 	bpy.ops.object.select_all(action='DESELECT')
-	# bpy.data.objects['Camera'].select = True    # Blender 2.7x
 	bpy.data.objects['Cube'].select_set(True) # Blender 2.8x
 	bpy.ops.object.delete() 
 

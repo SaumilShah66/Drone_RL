@@ -14,4 +14,4 @@ sys.path.append('/usr/local/lib/python3.7/dist-packages')
 sys.path.append('/usr/local/lib/python3.7/dist-packages/cv2')
 sys.path.append('/usr/lib/python3/dist-packages')
 from RL import *
-main()
+run_rl()

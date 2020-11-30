@@ -68,10 +68,19 @@ class Environment():
 		return reward
 
 	def checkCollision(self):
+		x, y, z = self.cam.location.x, self.cam.location.y, self.cam.location.z 
+		if x >=10 or x<=-10: 
+			os.system("echo outside x")
+			return True
+		if x >=10 or x<=-10: 
+			os.system("echo outside y")
+			return True
 		minimum_depth = self.current_depth_numpy.min()
 		if minimum_depth <= self.threshold:
+			os.system("echo Collided %s"%minimum_depth)
 			return True
 		else:
+			os.system("echo Not collided %s"%minimum_depth)
 			return False
 
 	def updateEpisode(self):
