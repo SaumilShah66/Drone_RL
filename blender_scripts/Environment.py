@@ -39,15 +39,30 @@ class Environment():
 		self.current_image = None
 		self.current_depth_numpy = None
 		self.threshold = 0.01 # Meters
-
+		self.previous_actions = [2,2,2,2]
+		
 	def step(self, action):
 		## 0 -- Left || 1 -- Right || 2 -- Forward
+		self.count += 1
+		self.previous_actions.remove(self.previous_actions[0])
+		self.previous_actions.append(action)
 		self.take_action(action)
 		directory = self.root_dir + "/Episode_" + str(self.episode)
 		render_and_save_(directory)
 		self.current_image = cv2.imread(directory+"/Camera.png")
 		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
-		pass
+		reward = self.calculate_reward()
+		collide = self.checkCollision()
+		if collide:
+			reward=-10
+		return self.current_image, reward, collide
+
+	def calculate_reward(self):
+		if not 2 in self.previous_actions:
+			reward = -1
+		else:
+			reward = 1
+		return reward
 
 	def checkCollision(self):
 		minimum_depth = self.current_depth_numpy.min()
@@ -76,4 +91,9 @@ class Environment():
 		self.initial_orientation = initial_orientation
 		self.cam.location = self.initial_position
 		self.cam.rotation_euler = self.initial_orientation
-		pass
+		directory = self.root_dir + "/Episode_" + str(self.episode)
+		render_and_save_(directory)
+		self.current_image = cv2.imread(directory+"/Camera.png")
+		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
+		self.updateEpisode()
+		return self.current_image
