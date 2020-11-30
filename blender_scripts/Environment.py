@@ -25,13 +25,13 @@ def render_and_save_(path_dir):
 	    bpy.context.scene.render.filepath = path_dir
 
 class Environment():
-	def __init__(self, cam, initial_position, initial_orientation, dir, rotation_step=30,
-				 forward_step = 0.5):
-		self.cam =cam
+	def __init__(self, initial_position = Vector((0,0,5)), initial_orientation = Euler((0,0,0),'XYZ'),
+				 root_dir = "~/RL_exp", rotation_step=30, forward_step = 0.5):
+		self.cam = bpy.data.objects['Camera']
 		self.count=0
 		self.initial_position = initial_position
 		self.initial_orientation = initial_orientation
-		self.root_dir = dir
+		self.root_dir = root_dir
 		self.rotation_step = np.radians(rotation_step)
 		self.forward_step = forward_step
 		self.episode = 0

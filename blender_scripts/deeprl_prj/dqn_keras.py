@@ -315,8 +315,8 @@ class DQNAgent:
             # print("******* fit_action", action_state.shape)
             # print("******* fit_proecess", processed_state.shape)
 
-            env.render()
-            state, reward, done, info = env.step(action)
+            # env.render()
+            state, reward, done = env.step(action)
 
             # processed_next_state is a normalized [0,1] float32 grayscale image of size (84,84)
             processed_next_state = self.atari_processor.process_state_for_network(state)
@@ -454,7 +454,7 @@ class DQNAgent:
             t += 1
             action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
             action = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
-            state, reward, done, info = env.step(action)
+            state, reward, done = env.step(action)
             episode_frames += 1
             episode_reward[idx_episode-1] += reward 
             if episode_frames > max_episode_length:

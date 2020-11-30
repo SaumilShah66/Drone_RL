@@ -2,8 +2,9 @@
 
 import argparse
 import os
-import gym
-from gym import wrappers
+# import gym
+# from gym import wrappers
+from Environment import *
 import tensorflow as tf
 from future.builtins import input
 
@@ -74,7 +75,7 @@ def get_output_folder(args, parent_dir, env_name, task_name):
 
 def main():
     parser = argparse.ArgumentParser(description='Run DQN on Atari Breakout')
-    parser.add_argument('--env', default='QuadCopter-v4', help='Atari env name')
+    # parser.add_argument('--env', default='QuadCopter-v4', help='Atari env name')
     parser.add_argument('-o', '--output', default='./log/', help='Directory to save data to')
     parser.add_argument('--seed', default=0, type=int, help='Random seed')
     parser.add_argument('--gamma', default=0.99, type=float, help='Discount factor')
@@ -112,9 +113,10 @@ def main():
     parser.add_argument('--bidir', default=False, dest='bidir', action='store_true', help='enable two layer bidirectional lstm')
 
     args = parser.parse_args()
-    args.output = get_output_folder(args, args.output, args.env, args.task_name)
+    args.output = get_output_folder(args, args.output, "blender_env", args.task_name)
 
-    env = gym.make(args.env)
+    # env = gym.make(args.env)
+    env = Environment()
     print("==== Output saved to: ", args.output)
     print("==== Args used:")
     print(args)
@@ -125,7 +127,7 @@ def main():
 
     # num_actions = env.action_space.n
     num_actions = 3
-    print(">>>> Game ", args.env, " #actions: ", num_actions)
+    print(">>>> #actions: ", num_actions)
 
     dqn = DQNAgent(args, num_actions)
     if args.train:
