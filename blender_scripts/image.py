@@ -1,6 +1,6 @@
 '''
 import sys
-sys.path.append("/media/saumil/Extra_Linux/818B/blender_depth")
+sys.path.append("/media/saumil/Extra_Linux/818B/Drone_RL/blender_scripts")
 from image import *
 
 sys.path.append('/usr/lib/python3.7')

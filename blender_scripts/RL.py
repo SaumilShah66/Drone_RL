@@ -76,7 +76,7 @@ def get_output_folder(args, parent_dir, env_name, task_name):
 def main():
     parser = argparse.ArgumentParser(description='Run DQN on Atari Breakout')
     # parser.add_argument('--env', default='QuadCopter-v4', help='Atari env name')
-    parser.add_argument('-o', '--output', default='./log/', help='Directory to save data to')
+    parser.add_argument('-o', '--output', default='/home/saumil/RL_exp/log/', help='Directory to save data to')
     parser.add_argument('--seed', default=0, type=int, help='Random seed')
     parser.add_argument('--gamma', default=0.99, type=float, help='Discount factor')
     parser.add_argument('--batch_size', default=32, type=int, help='Minibatch size')

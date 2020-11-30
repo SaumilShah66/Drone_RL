@@ -12,6 +12,7 @@ import os
 import numpy as np
 from blender_utils import *
 from exr2png import exr2numpy
+import cv2
 
 def render_and_save_(path_dir):
 	nodes = bpy.context.scene.node_tree.nodes
@@ -19,18 +20,20 @@ def render_and_save_(path_dir):
 		os.mkdir(path_dir)
 	for cam in [obj for obj in bpy.data.objects if obj.type == 'CAMERA']:
 	    bpy.context.scene.camera = cam
-	    bpy.context.scene.render.filepath = path_dir
+	    bpy.context.scene.render.filepath = path_dir + "/Camera.png"
 	    nodes['File Output'].base_path = path_dir 
 	    bpy.ops.render.render(write_still=True)
-	    bpy.context.scene.render.filepath = path_dir
+	    # bpy.context.scene.render.filepath = path_dir
 
 class Environment():
-	def __init__(self, initial_position = Vector((0,0,5)), initial_orientation = Euler((0,0,0),'XYZ'),
-				 root_dir = "~/RL_exp", rotation_step=30, forward_step = 0.5):
+	def __init__(self, initial_position = Vector((0,0,5)), initial_orientation = Euler((1.57,0,0),'XYZ'),
+				 root_dir = "/home/saumil/RL_exp", rotation_step=30, forward_step = 0.5):
 		self.cam = bpy.data.objects['Camera']
 		self.count=0
 		self.initial_position = initial_position
 		self.initial_orientation = initial_orientation
+		if not os.path.isdir(root_dir):
+			os.mkdir(root_dir)
 		self.root_dir = root_dir
 		self.rotation_step = np.radians(rotation_step)
 		self.forward_step = forward_step
@@ -87,8 +90,6 @@ class Environment():
 		
 	def reset(self):
 		self.count = 0
-		self.initial_position = initial_position
-		self.initial_orientation = initial_orientation
 		self.cam.location = self.initial_position
 		self.cam.rotation_euler = self.initial_orientation
 		directory = self.root_dir + "/Episode_" + str(self.episode)
