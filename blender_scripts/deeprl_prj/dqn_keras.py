@@ -6,14 +6,15 @@ from deeprl_prj.preprocessors import *
 from deeprl_prj.utils import *
 from deeprl_prj.core import *
 
-import keras
-from keras.optimizers import (Adam, RMSprop)
-from keras.layers import (Activation, Convolution2D, Dense, Flatten, Input,
-        Permute, Lambda, Reshape, TimeDistributed, LSTM, RepeatVector, Permute, multiply)
-from keras.layers.wrappers import Bidirectional
-from keras.models import Model
-from keras import backend as K
-from keras.backend.tensorflow_backend import set_session
+from tensorflow import keras
+from tensorflow.keras.optimizers import (Adam, RMSprop)
+# from tensorflow.keras.layers import (Activation, Convolution2D, Dense, Flatten, Input,
+#         Permute, Lambda, Reshape, TimeDistributed, LSTM, RepeatVector, Permute, multiply)
+from tensorflow.keras.layers import (Convolution2D, Dense, Flatten, Input, Lambda, Reshape, multiply)
+# from tensorflow.keras.layers import Bidirectional
+from tensorflow.keras.models import Model
+from tensorflow.keras import backend as K
+from tensorflow.keras.backend import set_session
 
 import sys
 from gym import wrappers
