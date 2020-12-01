@@ -464,7 +464,7 @@ class DQNAgent:
             self.q_network.load_weights(self.load_network_path)
             print("Load network from:", self.load_network_path)
 
-        state = env.reset()
+        state, depth = env.reset()
         # if monitor:
         #     env = wrappers.Monitor(env, self.output_path_videos, video_callable=lambda x:True, resume=True)
 
@@ -478,9 +478,10 @@ class DQNAgent:
             if(monitor):
                 vw.write(state)
 
-            action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
+            # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
+            action_state = np.dstack((state/255.0, depth/60.0))
             action = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
-            state, reward, done = env.step(action)
+            state, depth, reward, done = env.step(action)
             episode_frames += 1
             episode_reward[idx_episode-1] += reward 
             if episode_frames > max_episode_length:
@@ -492,11 +493,11 @@ class DQNAgent:
                 save_scalar(eval_count, 'eval/eval_episode_raw_reward', episode_reward[idx_episode-1], self.writer)
                 save_scalar(eval_count, 'eval/eval_episode_raw_length', episode_frames, self.writer)
                 sys.stdout.flush()
-                state = env.reset()
+                state, depth = env.reset()
                 episode_frames = 0
                 idx_episode += 1
-                self.atari_processor.reset()
-                self.history_processor.reset()
+                # self.atari_processor.reset()
+                # self.history_processor.reset()
 
         reward_mean = np.mean(episode_reward)
         reward_std = np.std(episode_reward)
