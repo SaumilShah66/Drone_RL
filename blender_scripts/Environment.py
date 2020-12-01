@@ -13,6 +13,7 @@ import numpy as np
 from blender_utils import *
 from exr2png import exr2numpy
 import cv2
+import matplotlib.pyplot as plt
 
 def render_and_save_(path_dir):
 	nodes = bpy.context.scene.node_tree.nodes
@@ -43,6 +44,7 @@ class Environment():
 		self.current_depth_numpy = None
 		self.threshold = 0.01 # Meters
 		self.previous_actions = [2,2,2,2]
+		plt.ioff()
 		
 	def step(self, action):
 		## 0 -- Left || 1 -- Right || 2 -- Forward
@@ -54,6 +56,9 @@ class Environment():
 		render_and_save_(directory)
 		self.current_image = cv2.imread(directory+"/Camera.png")
 		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
+		plot_depth = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
+		plt.imshow(self.current_image)
+		# plt.imshow(plot_depth)
 		reward = self.calculate_reward()
 		collide = self.checkCollision()
 		if collide:
