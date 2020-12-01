@@ -46,7 +46,7 @@ class Environment():
 		self.pi = np.radians(90)
 		self.current_image = None
 		self.current_depth_numpy = None
-		self.threshold = 0.05 # Meters
+		self.threshold = 0.7 # Meters
 		self.previous_actions = [2,2,2,2]
 		
 	def step(self, action):
@@ -66,7 +66,8 @@ class Environment():
 		collide = self.checkCollision()
 		if collide:
 			reward=-10
-		return self.current_image, reward, collide
+		cv2.imwrite(directory+"/depth.png", self.current_depth_numpy)
+		return self.current_image, self.current_depth_numpy, reward, collide
 
 	def calculate_reward(self):
 		if not 2 in self.previous_actions:
@@ -80,7 +81,7 @@ class Environment():
 		if x >=10 or x<=-10: 
 			os.system("echo outside x")
 			return True
-		if x >=10 or x<=-10: 
+		if y >=10 or y<=-10: 
 			os.system("echo outside y")
 			return True
 		minimum_depth = self.current_depth_numpy.min()
@@ -114,4 +115,7 @@ class Environment():
 		render_and_save_(directory)
 		self.current_image = cv2.imread(directory+"/Camera_reset.png")
 		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
-		return self.current_image
+		cv2.imwrite(directory+"/init_depth.png", self.current_depth_numpy)
+		# os.system("echo Reser: img shape %s"%self.current_image.shape)
+		# os.system("echo Reser: depth shape %s"%self.current_depth_numpy.shape)
+		return self.current_image, self.current_depth_numpy

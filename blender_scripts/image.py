@@ -47,19 +47,19 @@ def assign_material(image_path, ob):
 
 def createWalls(wallDirectory):
 	images = glob.glob(wallDirectory+"/*")
-	locations = [Vector((  0, 10,  5)), 
-				 Vector(( 10,  0,  5)), 
-				 Vector((  0,-10,  5)), 
-				 Vector((-10,  0,  5)),
+	locations = [Vector((  0, 20,  5)), 
+				 Vector(( 20,  0,  5)), 
+				 Vector((  0,-20,  5)), 
+				 Vector((-20,  0,  5)),
 				 Vector((  0,  0,  0)),
-				 Vector((  0,  0, 10))]
+				 Vector((  0,  0, 20))]
 	orientations = [Vector((0, 0, 0))]*6
-	scales = [Vector((  10, 0.01,    5)), 
-	   		  Vector((0.01,   10,    5)), 
-	   		  Vector((  10, 0.01,    5)), 
-	   		  Vector((0.01,   10,    5)),
-	   		  Vector((  10,   10, 0.01)),
-	   		  Vector((  10,   10, 0.01))]
+	scales = [Vector((  20, 0.01,    5)), 
+	   		  Vector((0.01,   20,    5)), 
+	   		  Vector((  20, 0.01,    5)), 
+	   		  Vector((0.01,   20,    5)),
+	   		  Vector((  20,   20, 0.01)),
+	   		  Vector((  20,   20, 0.01))]
 	for i in range(6):
 		image_index = random.randint(0, len(images)-1)
 		wall_name = "Wall_" + str(i)

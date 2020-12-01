@@ -21,6 +21,7 @@ import sys
 from Environment import *
 import tensorflow as tf
 import numpy as np
+import os
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -283,8 +284,8 @@ class DQNAgent:
         eval_count = 0
 
         # state is the image observed in the environment
-        state = env.reset()
-        print ("state -->", state.shape)
+        state, depth = env.reset()
+
         burn_in = True
         idx_episode = 1
         episode_loss = .0
@@ -300,10 +301,19 @@ class DQNAgent:
         step_reward_raw = 0.0
 
         for t in range(self.num_burn_in + num_iterations):
+            # os.system("echo iteration --> %s, episode --> %s"%(t, idx_episode))
+
+
             print ("iteration --> %s, episode --> %s" % (t, idx_episode))
+
             # INPUT to "atari.process_state_for_network" is a normalized [0,1] float32 grayscale image
             # action_state is a np.array of noramlized grayscale mages of shape [rows, cols, num_frames] in order of oldest, ....recent
-            action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
+            # depth_ = self.atari_processor.process_state_for_network(depth)
+            # state = self.atari_processor.process_state_for_network(state)
+            print("state" , state.shape)
+            print("depth" , depth.shape)
+            action_state = np.dstack((state/255.0, depth/60.0))
+            # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
             policy_type = "UniformRandomPolicy" if burn_in else "LinearDecayGreedyEpsilonPolicy"
             
             # q-val is a row vector (used in select_action function as an output of the DQN)
@@ -312,24 +322,30 @@ class DQNAgent:
             
             # processed_state is a uint8 grayscale image of size (84,84)
             # to confirm if the shape is (84,84,1) ?
-            processed_state = self.atari_processor.process_state_for_memory(state)
+
+            # processed_state = self.atari_processor.process_state_for_memory(state)
+
+            processed_state = state/255.0
 
             # print("******* fit_action", action_state.shape)
             # print("******* fit_proecess", processed_state.shape)
 
             # env.render()
-            state, reward, done = env.step(action)
+            state, depth, reward, done = env.step(action)
 
             # processed_next_state is a normalized [0,1] float32 grayscale image of size (84,84)
-            processed_next_state = self.atari_processor.process_state_for_network(state)
-            action_next_state = np.dstack((action_state, processed_next_state))
+            # processed_next_state = self.atari_processor.process_state_for_network(state)
+            processed_next_state = state/255.0
+            action_next_state = np.dstack((processed_next_state, depth/60.0))
+
+            # action_next_state = np.dstack((action_state, processed_next_state))
             # ignore oldest state (image), and store future action with already updates new state
-            action_next_state = action_next_state[:, :, 1:]
+            # action_next_state = action_next_state[:, :, 1:]
 
             processed_reward = self.atari_processor.process_reward(reward) # returns the same "reward"
 
             # memory stores the sequential data of grayscale images <s_t, a_t, r_t, new state is_terminal>
-            self.memory.append(processed_state, action, processed_reward, done)
+            self.memory.append(action_state, action, processed_reward, done)
 
             # current_sample is a structure of <S,A,R,S'> where S have 4 stacked images
             current_sample = Sample(action_state, action, processed_reward, action_next_state, done)
@@ -350,7 +366,9 @@ class DQNAgent:
             # done = True is the episode ends or is_treminal state. Thus at end we reset everything
             if done:
                 # adding last frame only to save last state (new observed state after executing action)
-                last_frame = self.atari_processor.process_state_for_memory(state)
+                # last_frame = self.atari_processor.process_state_for_memory(state)
+
+                last_frame = action_next_state
                 # action, reward, done doesn't matter here
                 self.memory.append(last_frame, action, 0, done)
                 if not burn_in:
@@ -379,9 +397,9 @@ class DQNAgent:
                     episode_target_value = .0
                     idx_episode += 1
                 burn_in = (t < self.num_burn_in)
-                state = env.reset()
-                self.atari_processor.reset()    # empty function
-                self.history_processor.reset()  # empty function
+                state, depth = env.reset()
+                # self.atari_processor.reset()    # empty function
+                # self.history_processor.reset()  # empty function
 
             if burn_in:
                 last_burn = t
@@ -438,14 +456,17 @@ class DQNAgent:
         visually inspect your policy.
         """
         print("Evaluation starts.")
+        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+        vw = cv2.VideoWriter(args.output+"/videos/eval.avi", fourcc, 30, (256,256))
 
         is_training = False
         if self.load_network:
             self.q_network.load_weights(self.load_network_path)
             print("Load network from:", self.load_network_path)
+
+        state = env.reset()
         # if monitor:
         #     env = wrappers.Monitor(env, self.output_path_videos, video_callable=lambda x:True, resume=True)
-        state = env.reset()
 
         idx_episode = 1
         episode_frames = 0
@@ -454,6 +475,9 @@ class DQNAgent:
 
         while idx_episode <= num_episodes:
             t += 1
+            if(monitor):
+                vw.write(state)
+
             action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
             action = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
             state, reward, done = env.step(action)
@@ -479,5 +503,6 @@ class DQNAgent:
         print("Evaluation summury: num_episodes [%d], reward_mean [%.3f], reward_std [%.3f]" %
             (num_episodes, reward_mean, reward_std))
         sys.stdout.flush()
+        vw.release()
 
         return reward_mean, reward_std, eval_count

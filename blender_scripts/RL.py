@@ -5,7 +5,7 @@ import os
 # import gym
 # from gym import wrappers
 from Environment import *
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 from future.builtins import input
 
 # >>>>>>>>>>>>>>>>>>>>>>>>
@@ -85,7 +85,7 @@ def run_rl():
     parser.add_argument('--final_epsilon', default=0.05, type=float, help='Final exploration probability in epsilon-greedy')
     parser.add_argument('--exploration_steps', default=24000, type=int, help='Number of steps over which the initial value of epsilon is linearly annealed to its final value')
     parser.add_argument('--num_samples', default=40000, type=int, help='Number of training samples from the environment in training')
-    parser.add_argument('--num_frames', default=5, type=int, help='Number of frames to feed to Q-Network')
+    parser.add_argument('--num_frames', default=4, type=int, help='Number of frames to feed to Q-Network')
     parser.add_argument('--frame_width', default=84, type=int, help='Resized frame width')
     parser.add_argument('--frame_height', default=84, type=int, help='Resized frame height')
     parser.add_argument('--replay_memory_size', default=50000, type=int, help='Number of replay memory the agent uses for training')
@@ -107,7 +107,6 @@ def run_rl():
     parser.add_argument('--monitor', default=False, action='store_true', help='record video')
     parser.add_argument('--task_name', default='', help='task name')
     parser.add_argument('--recurrent', default=False, dest='recurrent', action='store_true', help='enable recurrent DQN')
-    parser.add_argument('--a_t', default=False, dest='a_t', action='store_true', help='enable temporal/spatial attention')
     parser.add_argument('--global_a_t', default=False, dest='global_a_t', action='store_true', help='enable global temporal attention')
     parser.add_argument('--selector', default=False, dest='selector', action='store_true', help='enable selector for spatial attention')
     parser.add_argument('--bidir', default=False, dest='bidir', action='store_true', help='enable two layer bidirectional lstm')
@@ -135,7 +134,7 @@ def run_rl():
         dqn.fit(env, args.num_samples, args.max_episode_length)
     else:
         print(">> Evaluation mode.")
-        dqn.evaluate(env, args.num_episodes_at_test, 0, args.max_episode_length, args.monitor)
+        dqn.evaluate(env, args.num_episodes_at_test, 0, args.max_episode_length, True)
 
 if __name__ == '__main__':
     run_rl()

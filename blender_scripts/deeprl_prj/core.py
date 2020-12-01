@@ -182,10 +182,11 @@ class ReplayMemory:
         index where the next sample should be inserted in the list.
         """
         self.memory_size = args.replay_memory_size
-        self.history_length = args.num_frames
+        # self.history_length = args.num_frames
+        self.history_length = 1
         self.actions = np.zeros(self.memory_size, dtype = np.int8)
         self.rewards = np.zeros(self.memory_size, dtype = np.int8)
-        self.screens = np.zeros((self.memory_size, args.frame_height, args.frame_width), dtype = np.uint8)
+        self.screens = np.zeros((self.memory_size, args.frame_height, args.frame_width, 4), dtype = np.uint8)
         self.terminals = np.zeros(self.memory_size, dtype = np.bool)
         self.current = 0
 
@@ -200,9 +201,13 @@ class ReplayMemory:
         self.current += 1
 
     def get_state(self, index):
-        state = self.screens[index - self.history_length + 1:index + 1, :, :]
+        # state = self.screens[index - self.history_length + 1:index + 1, :, :]
+
+        state = self.screens[index, :, :]
         # history dimention last
-        return np.transpose(state, (1, 2, 0)) 
+        # return np.transpose(state, (1, 2, 0)) 
+
+        return state
 
     def sample(self, batch_size):
         samples = []
@@ -213,9 +218,9 @@ class ReplayMemory:
         end = min(self.current, self.memory_size) - 1
 
         while len(indexes) < batch_size: 
-            index = np.random.randint(self.history_length - 1, end)
+            index = np.random.randint(self.current -1)
             # sampled state shouldn't contain episode end
-            if self.terminals[index - self.history_length + 1: index + 1].any():
+            if self.terminals[index]:
                 continue
             indexes.append(index)
 
