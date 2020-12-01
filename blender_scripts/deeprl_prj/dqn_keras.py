@@ -284,7 +284,7 @@ class DQNAgent:
 
         # state is the image observed in the environment
         state = env.reset()
-
+        print ("state -->", state.shape)
         burn_in = True
         idx_episode = 1
         episode_loss = .0

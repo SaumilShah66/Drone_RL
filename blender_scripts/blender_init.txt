@@ -1,0 +1,14 @@
+import sys
+sys.path.append('/usr/lib/python3.7')
+sys.path.append('/usr/lib/python3.7/lib-dynload')
+sys.path.append('/home/revati/.local/lib/python3.7/site-packages')
+sys.path.append('/usr/local/lib/python3.7/dist-packages')
+sys.path.append('/home/revati/.local/lib/python3.7/site-packages/cv2')
+sys.path.append('/usr/lib/python3/dist-packages')
+sys.path.append("/home/revati/CMSC818B/Drone_RL/blender_scripts")
+from RL import *
+
+from image import * 
+
+
+run_rl()

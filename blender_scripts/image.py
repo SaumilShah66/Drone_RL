@@ -142,9 +142,9 @@ def getdata(start=0):
 		j+=1
 		print(str(j), " images saved")
 
-wall_directory = "/media/saumil/Extra_Linux/818B/blender_depth/walls"
-save_directory = "/media/saumil/Extra_Linux/818B/blender_depth/data/"
-textures = "/media/saumil/Extra_Linux/818B/blender_depth/textures/*"
+wall_directory = "/home/revati/CMSC818B/Drone_RL/blender_scripts/walls"
+save_directory = "/home/revati/CMSC818B/Drone_RL/blender_scripts/data/"
+textures = "/home/revati/CMSC818B/Drone_RL/blender_scripts/textures/*"
 
 bpy.context.scene.render.resolution_x = 256
 bpy.context.scene.render.resolution_y = 256

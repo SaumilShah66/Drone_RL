@@ -5,7 +5,7 @@ import os
 # import gym
 # from gym import wrappers
 from Environment import *
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from future.builtins import input
 
 # >>>>>>>>>>>>>>>>>>>>>>>>
@@ -66,7 +66,7 @@ def get_output_folder(args, parent_dir, env_name, task_name):
         print('===== Folder did not exist; creating... %s'%parent_dir)
     else:
         print('===== Folder exists; delete? %s'%parent_dir)
-        response = input("Press Enter to continue...")
+        # response = input("Press Enter to continue...")
         os.system('rm -rf %s/' % (parent_dir))
     os.makedirs(parent_dir+'/videos/')
     os.makedirs(parent_dir+'/images/')
@@ -76,7 +76,7 @@ def get_output_folder(args, parent_dir, env_name, task_name):
 def run_rl():
     parser = argparse.ArgumentParser(description='Run DQN on Atari Breakout')
     # parser.add_argument('--env', default='QuadCopter-v4', help='Atari env name')
-    parser.add_argument('-o', '--output', default='/home/saumil/RL_exp/log/', help='Directory to save data to')
+    parser.add_argument('-o', '--output', default='/home/revati/RL_exp/log/', help='Directory to save data to')
     parser.add_argument('--seed', default=0, type=int, help='Random seed')
     parser.add_argument('--gamma', default=0.99, type=float, help='Discount factor')
     parser.add_argument('--batch_size', default=32, type=int, help='Minibatch size')
