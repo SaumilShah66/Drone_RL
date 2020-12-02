@@ -218,7 +218,7 @@ class ReplayMemory:
         end = min(self.current, self.memory_size) - 1
 
         while len(indexes) < batch_size: 
-            index = np.random.randint(self.current -1)
+            index = np.random.randint(end -1)
             # sampled state shouldn't contain episode end
             if self.terminals[index]:
                 continue

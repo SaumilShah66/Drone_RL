@@ -280,6 +280,9 @@ class DQNAgent:
         """
         is_training = True
         print("Training starts.")
+        if self.load_network:
+            self.q_network.load_weights(self.load_network_path)
+            print("Load network from:", self.load_network_path)
         self.save_model(0)
         eval_count = 0
 
