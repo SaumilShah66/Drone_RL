@@ -1,0 +1,53 @@
+
+########Download Docker#######
+
+https://github.com/lambdal/lambda-stack-dockerfiles
+
+
+######Build Docker############
+sudo docker build -t lambda-stack:18.04 -f Dockerfile.bionic .
+
+
+######Run Docker#############
+
+Default:
+docker run --name <give_some_name_to_your_container> -it --env NVIDIA_DRIVER_CAPABILITIES=all  --gpus all --runtime=nvidia --net=host --env="DISPLAY"  --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/default/CMSC818B_WS/:<Location of some directory in your host machine that you want to use in docker>  lambda-stack:18.04
+
+
+For my system:
+docker run --name cmsc818b_docker -it --env NVIDIA_DRIVER_CAPABILITIES=all  --gpus all --runtime=nvidia --net=host --env="DISPLAY"  --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/default/CMSC818B_WS/:/home/revati/CMSC818B lambda-stack:18.04
+
+
+########Resolve Docker########
+sudo pkill -SIGHUP dockerd
+sudo apt install -y nvidia-docker2
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+
+######Docker Visualization####
+Inside Container:
+apt-get update
+apt-get install -y x11-apps
+
+On local:
+Default:
+xhost +local:`docker inspect --format='{{ .Config.Hostname }}' $containerId`
+
+For my system:
+xhost +local:`docker inspect --format='{{ .Config.Hostname }}' cmsc818b_docker`
+
+#####Start Docker###########
+
+Default:
+docker start -i $containerId
+
+For my system:
+docker start -i cmsc818b_docker
+
+#####Python change to 3.7###
+
+https://tech.serhatteker.com/post/2019-09/upgrade-python37-on-ubuntu18/
+
+
+
