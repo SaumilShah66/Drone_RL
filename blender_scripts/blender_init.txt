@@ -29,6 +29,7 @@
 # update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 
 
+# pip3 install 'h5py<3.0.0'
 
 
 
