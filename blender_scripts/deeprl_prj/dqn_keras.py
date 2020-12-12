@@ -205,13 +205,14 @@ class DQNAgent:
         q_values = self.calc_q_values(state)
         if is_training:
             if kwargs['policy_type'] == 'UniformRandomPolicy':
-                return UniformRandomPolicy(self.num_actions).select_action()
+                return UniformRandomPolicy(self.num_actions).select_action(),-1,q_values
             else:
                 # linear decay greedy epsilon policy
-                return self.policy.select_action(q_values, is_training)
+                result = self.policy.select_action(q_values, is_training) 
+                return result[0],result[1],q_values
         else:
             # return GreedyEpsilonPolicy(0.05).select_action(q_values)
-            return GreedyPolicy().select_action(q_values)
+            return GreedyPolicy().select_action(q_values),1,q_values
 
     def update_policy(self, current_sample):
         """Update your policy.
@@ -302,144 +303,164 @@ class DQNAgent:
         step_loss_list = list()
         step_reward = 0.0
         step_reward_raw = 0.0
-
-        for t in range(self.num_burn_in + num_iterations):
-            # os.system("echo iteration --> %s, episode --> %s"%(t, idx_episode))
-
-
-            print ("iteration --> %s, episode --> %s" % (t, idx_episode))
-
-            # INPUT to "atari.process_state_for_network" is a normalized [0,1] float32 grayscale image
-            # action_state is a np.array of noramlized grayscale mages of shape [rows, cols, num_frames] in order of oldest, ....recent
-            # depth_ = self.atari_processor.process_state_for_network(depth)
-            # state = self.atari_processor.process_state_for_network(state)
-            print("state" , state.shape)
-            print("depth" , depth.shape)
-            action_state = np.dstack((state/255.0, depth/60.0))
-            # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
-            policy_type = "UniformRandomPolicy" if burn_in else "LinearDecayGreedyEpsilonPolicy"
-            
-            # q-val is a row vector (used in select_action function as an output of the DQN)
-            # action contains the index value of the selected q-val i.e. action id
-            action = self.select_action(action_state, is_training, policy_type = policy_type)
-            
-            # processed_state is a uint8 grayscale image of size (84,84)
-            # to confirm if the shape is (84,84,1) ?
-
-            # processed_state = self.atari_processor.process_state_for_memory(state)
-
-            processed_state = state/255.0
-
-            # print("******* fit_action", action_state.shape)
-            # print("******* fit_proecess", processed_state.shape)
-
-            # env.render()
-            state, depth, reward, done = env.step(action)
-
-            # processed_next_state is a normalized [0,1] float32 grayscale image of size (84,84)
-            # processed_next_state = self.atari_processor.process_state_for_network(state)
-            processed_next_state = state/255.0
-            action_next_state = np.dstack((processed_next_state, depth/60.0))
-
-            # action_next_state = np.dstack((action_state, processed_next_state))
-            # ignore oldest state (image), and store future action with already updates new state
-            # action_next_state = action_next_state[:, :, 1:]
-
-            processed_reward = self.atari_processor.process_reward(reward) # returns the same "reward"
-
-            # memory stores the sequential data of grayscale images <s_t, a_t, r_t, new state is_terminal>
-            self.memory.append(action_state, action, processed_reward, done)
-
-            # current_sample is a structure of <S,A,R,S'> where S have 4 stacked images
-            current_sample = Sample(action_state, action, processed_reward, action_next_state, done)
-            
-            if not burn_in: 
-                episode_frames += 1
-                episode_reward += processed_reward
-                episode_raw_reward += reward
-                if episode_frames > max_episode_length:
-                    done = True
-
-            if not burn_in:
-                step_reward += processed_reward
-                step_reward_raw += reward
-                step_losses = [t-last_burn-1, step_reward, step_reward_raw, step_reward / (t-last_burn-1), step_reward_raw / (t-last_burn-1)]
-                step_loss_list.append(step_losses)
-
-            # done = True is the episode ends or is_treminal state. Thus at end we reset everything
-            if done:
-                # adding last frame only to save last state (new observed state after executing action)
-                # last_frame = self.atari_processor.process_state_for_memory(state)
-
-                last_frame = action_next_state
-                # action, reward, done doesn't matter here
-                self.memory.append(last_frame, action, 0, done)
-                if not burn_in:
-                    avg_target_value = episode_target_value / episode_frames
-                    print(">>> Training: time %d, episode %d, length %d, reward %.0f, raw_reward %.0f, loss %.4f, target value %.4f, policy step %d, memory cap %d" % 
-                        (t, idx_episode, episode_frames, episode_reward, episode_raw_reward, episode_loss, 
-                        avg_target_value, self.policy.step, self.memory.current))
-                    sys.stdout.flush()
-                    save_scalar(idx_episode, 'train/episode_frames', episode_frames, self.writer)
-                    save_scalar(idx_episode, 'train/episode_reward', episode_reward, self.writer)
-                    save_scalar(idx_episode, 'train/episode_raw_reward', episode_raw_reward, self.writer)
-                    save_scalar(idx_episode, 'train/episode_loss', episode_loss, self.writer)
-                    save_scalar(idx_episode, 'train_avg/avg_reward', episode_reward / episode_frames, self.writer)
-                    save_scalar(idx_episode, 'train_avg/avg_target_value', avg_target_value, self.writer)
-                    save_scalar(idx_episode, 'train_avg/avg_loss', episode_loss / episode_frames, self.writer)
-
-                    # log losses
-                    losses = [idx_episode, episode_frames, episode_reward, episode_raw_reward, episode_loss, episode_reward / episode_frames, avg_target_value, episode_loss / episode_frames]
-                    losses_list.append(losses)
-
-                    # reset values
-                    episode_frames = 0
-                    episode_reward = .0
-                    episode_raw_reward = .0
-                    episode_loss = .0
-                    episode_target_value = .0
-                    idx_episode += 1
-                burn_in = (t < self.num_burn_in)
-                state, depth = env.reset()
-                # self.atari_processor.reset()    # empty function
-                # self.history_processor.reset()  # empty function
-
-            if burn_in:
-                last_burn = t
-
-            if not burn_in:
-                if t % self.train_freq == 0:
-                    loss, target_value = self.update_policy(current_sample)
-                    episode_loss += loss
-                    episode_target_value += target_value
-                # update freq is based on train_freq
-                if t % (self.train_freq * self.target_update_freq) == 0:
-                    # target updates can have the option to be hard or soft
-                    # related functions are defined in deeprl_prj.utils
-                    # here we use hard target update as default
-                    self.target_network.set_weights(self.q_network.get_weights())
-                if t % self.save_freq == 0:
-                    self.save_model(idx_episode)
-
-                    loss_array = np.asarray(losses_list)
-                    print (loss_array.shape) # 10 element vector
-
-                    # loss_path = os.path.join('./losses/loss_episode%s.csv' % (idx_episode))
-                    loss_path = self.output_path + "/losses/loss_episodes" + str(idx_episode) + ".csv"
-                    np.savetxt(loss_path, loss_array, fmt='%.5f', delimiter=',')
-
-                    step_loss_array = np.asarray(step_loss_list)
-                    print (step_loss_array.shape) # 10 element vector
-
-                    step_loss_path = self.output_path + "/losses/loss_steps" + str(t-last_burn-1) + ".csv"
-                    np.savetxt(step_loss_path, step_loss_array, fmt='%.5f', delimiter=',')
+        # with open ('reward.txt','a') as f:
+        with open ('/home/varun/Drone_RL/blender_scripts/deeprl_prj/Results/reward.txt','a') as f:
+          file_open = False
+          for t in range(self.num_burn_in + num_iterations):
+              # os.system("echo iteration --> %s, episode --> %s"%(t, idx_episode))
 
 
-                # No evaluation while training
-                # if t % (self.eval_freq * self.train_freq) == 0:
-                #     episode_reward_mean, episode_reward_std, eval_count = self.evaluate(env, 1, eval_count, max_episode_length, True)
-                #     save_scalar(t, 'eval/eval_episode_reward_mean', episode_reward_mean, self.writer)
-                #     save_scalar(t, 'eval/eval_episode_reward_std', episode_reward_std, self.writer)
+              # print ("iteration --> %s, episode --> %s" % (t, idx_episode))
+
+              # INPUT to "atari.process_state_for_network" is a normalized [0,1] float32 grayscale image
+              # action_state is a np.array of noramlized grayscale mages of shape [rows, cols, num_frames] in order of oldest, ....recent
+              # depth_ = self.atari_processor.process_state_for_network(depth)
+              # state = self.atari_processor.process_state_for_network(state)
+              # print("state" , state.shape)
+              # print("depth" , depth.shape)
+              action_state = np.dstack((state/255.0, depth/60.0))
+              # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
+              policy_type = "UniformRandomPolicy" if burn_in else "LinearDecayGreedyEpsilonPolicy"
+              
+              # q-val is a row vector (used in select_action function as an output of the DQN)
+              # action contains the index value of the selected q-val i.e. action id
+              action,policy,q_values = self.select_action(action_state, is_training, policy_type = policy_type)
+              
+              # processed_state is a uint8 grayscale image of size (84,84)
+              # to confirm if the shape is (84,84,1) ?
+
+              # processed_state = self.atari_processor.process_state_for_memory(state)
+
+              processed_state = state/255.0
+
+              # print("******* fit_action", action_state.shape)
+              # print("******* fit_proecess", processed_state.shape)
+
+              # env.render()
+              state, depth, reward, done = env.step(action)
+              if not burn_in:
+                if not file_open:
+                  file_open = True
+                  f_episode = open ("/home/varun/Drone_RL/blender_scripts/deeprl_prj/Results"+str(idx_episode)+'.txt','a')
+
+                if(policy == 0):
+                  policy_str = "Exploration"
+                elif(policy == 1):
+                  policy_str = "Exploitation"
+                else:
+                  policy_str = "N/A"
+
+                output_episode ="Episode:"+str(idx_episode)+"Policy:"+policy_str+", Action Index:"+str(action)+",Q values:"+str(q_values)+", Reward:"+str(reward)
+                f_episode.write(output_episode+'\n')
+              # processed_next_state is a normalized [0,1] float32 grayscale image of size (84,84)
+              # processed_next_state = self.atari_processor.process_state_for_network(state)
+              processed_next_state = state/255.0
+              action_next_state = np.dstack((processed_next_state, depth/60.0))
+
+              # action_next_state = np.dstack((action_state, processed_next_state))
+              # ignore oldest state (image), and store future action with already updates new state
+              # action_next_state = action_next_state[:, :, 1:]
+
+              processed_reward = self.atari_processor.process_reward(reward) # returns the same "reward"
+
+              # memory stores the sequential data of grayscale images <s_t, a_t, r_t, new state is_terminal>
+              self.memory.append(action_state, action, processed_reward, done)
+
+              # current_sample is a structure of <S,A,R,S'> where S have 4 stacked images
+              current_sample = Sample(action_state, action, processed_reward, action_next_state, done)
+              
+              if not burn_in: 
+                  episode_frames += 1
+                  episode_reward += processed_reward
+                  episode_raw_reward += reward
+                  if episode_frames > max_episode_length:
+                      done = True
+
+              if not burn_in:
+                  step_reward += processed_reward
+                  step_reward_raw += reward
+                  step_losses = [t-last_burn-1, step_reward, step_reward_raw, step_reward / (t-last_burn-1), step_reward_raw / (t-last_burn-1)]
+                  step_loss_list.append(step_losses)
+
+              # done = True is the episode ends or is_treminal state. Thus at end we reset everything
+              if done:
+                  # adding last frame only to save last state (new observed state after executing action)
+                  # last_frame = self.atari_processor.process_state_for_memory(state)
+                  
+                  last_frame = action_next_state
+                  # action, reward, done doesn't matter here
+                  self.memory.append(last_frame, action, 0, done)
+                  if not burn_in:
+                      f_episode.close()
+                      file_open=False
+
+                      output=str(episode_reward)+","+str(idx_episode)
+                      f.write(output+'\n')
+                      avg_target_value = episode_target_value / episode_frames
+                      print(">>> Training: time %d, episode %d, length %d, reward %.0f, raw_reward %.0f, loss %.4f, target value %.4f, policy step %d, memory cap %d" % 
+                          (t, idx_episode, episode_frames, episode_reward, episode_raw_reward, episode_loss, 
+                          avg_target_value, self.policy.step, self.memory.current))
+                      sys.stdout.flush()
+                      save_scalar(idx_episode, 'train/episode_frames', episode_frames, self.writer)
+                      save_scalar(idx_episode, 'train/episode_reward', episode_reward, self.writer)
+                      save_scalar(idx_episode, 'train/episode_raw_reward', episode_raw_reward, self.writer)
+                      save_scalar(idx_episode, 'train/episode_loss', episode_loss, self.writer)
+                      save_scalar(idx_episode, 'train_avg/avg_reward', episode_reward / episode_frames, self.writer)
+                      save_scalar(idx_episode, 'train_avg/avg_target_value', avg_target_value, self.writer)
+                      save_scalar(idx_episode, 'train_avg/avg_loss', episode_loss / episode_frames, self.writer)
+
+                      # log losses
+                      losses = [idx_episode, episode_frames, episode_reward, episode_raw_reward, episode_loss, episode_reward / episode_frames, avg_target_value, episode_loss / episode_frames]
+                      losses_list.append(losses)
+
+                      # reset values
+                      episode_frames = 0
+                      episode_reward = .0
+                      episode_raw_reward = .0
+                      episode_loss = .0
+                      episode_target_value = .0
+                      idx_episode += 1
+                  burn_in = (t < self.num_burn_in)
+                  state, depth = env.reset()
+                  # self.atari_processor.reset()    # empty function
+                  # self.history_processor.reset()  # empty function
+
+              if burn_in:
+                  last_burn = t
+
+              if not burn_in:
+                  if t % self.train_freq == 0:
+                      loss, target_value = self.update_policy(current_sample)
+                      episode_loss += loss
+                      episode_target_value += target_value
+                  # update freq is based on train_freq
+                  if t % (self.train_freq * self.target_update_freq) == 0:
+                      # target updates can have the option to be hard or soft
+                      # related functions are defined in deeprl_prj.utils
+                      # here we use hard target update as default
+                      self.target_network.set_weights(self.q_network.get_weights())
+                  if t % self.save_freq == 0:
+                      self.save_model(idx_episode)
+
+                      loss_array = np.asarray(losses_list)
+                      print (loss_array.shape) # 10 element vector
+
+                      # loss_path = os.path.join('./losses/loss_episode%s.csv' % (idx_episode))
+                      loss_path = self.output_path + "/losses/loss_episodes" + str(idx_episode) + ".csv"
+                      np.savetxt(loss_path, loss_array, fmt='%.5f', delimiter=',')
+
+                      step_loss_array = np.asarray(step_loss_list)
+                      print (step_loss_array.shape) # 10 element vector
+
+                      step_loss_path = self.output_path + "/losses/loss_steps" + str(t-last_burn-1) + ".csv"
+                      np.savetxt(step_loss_path, step_loss_array, fmt='%.5f', delimiter=',')
+
+
+                  # No evaluation while training
+                  # if t % (self.eval_freq * self.train_freq) == 0:
+                  #     episode_reward_mean, episode_reward_std, eval_count = self.evaluate(env, 1, eval_count, max_episode_length, True)
+                  #     save_scalar(t, 'eval/eval_episode_reward_mean', episode_reward_mean, self.writer)
+                  #     save_scalar(t, 'eval/eval_episode_reward_std', episode_reward_std, self.writer)
 
         self.save_model(idx_episode)
 
@@ -449,7 +470,7 @@ class DQNAgent:
         self.q_network.save_weights(safe_path)
         print("Network at", idx_episode, "saved to:", safe_path)
 
-    def evaluate(self, env, num_episodes, eval_count, max_episode_length=None, monitor=False):
+    def evaluate(self, env, output_path, num_episodes, eval_count, max_episode_length=None, monitor=False):
         """Test your agent with a provided environment.
 
         Basically run your policy on the environment and collect stats
@@ -460,7 +481,7 @@ class DQNAgent:
         """
         print("Evaluation starts.")
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-        vw = cv2.VideoWriter(args.output+"/videos/eval.avi", fourcc, 30, (256,256))
+        vw = cv2.VideoWriter(output_path + "/videos/eval.avi", fourcc, 30, (84,84))
 
         is_training = False
         if self.load_network:
@@ -483,7 +504,7 @@ class DQNAgent:
 
             # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
             action_state = np.dstack((state/255.0, depth/60.0))
-            action = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
+            action,policy,q_values = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
             state, depth, reward, done = env.step(action)
             episode_frames += 1
             episode_reward[idx_episode-1] += reward 

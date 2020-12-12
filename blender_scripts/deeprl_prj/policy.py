@@ -101,9 +101,9 @@ class GreedyEpsilonPolicy(Policy):
         """
         num_actions = q_values.shape[1] 
         if np.random.rand() < self.epsilon:
-            return UniformRandomPolicy(num_actions).select_action()
+            return UniformRandomPolicy(num_actions).select_action(),0
         else:
-            return GreedyPolicy().select_action(q_values)
+            return GreedyPolicy().select_action(q_values),1
 
 class LinearDecayGreedyEpsilonPolicy(Policy):
     """Policy with a parameter that decays linearly.

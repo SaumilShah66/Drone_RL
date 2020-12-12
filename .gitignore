@@ -1,0 +1,8 @@
+__pycache__
+**.pyc
+**/RL_exp_test
+**/RL_exp
+**/Misc
+**/CheckPoints
+**/weights
+**.weights

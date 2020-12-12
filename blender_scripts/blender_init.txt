@@ -1,3 +1,33 @@
+# python3 default change
+# https://tech.serhatteker.com/post/2019-09/upgrade-python37-on-ubuntu18/
+
+# openEXR
+# sudo apt-get install python3.7-dev
+# sudo apt-get install openexr,
+# sudo apt-get install libopenexr-dev,
+# pip3 install openexr
+# pip3 install -U pillow
+# pip3 install semver
+
+
+# Varun system
+
+import sys
+sys.path.append('/usr/lib/python3.7')
+sys.path.append('/usr/lib/python3.7/lib-dynload')
+sys.path.append('/home/varun/.local/lib/python3.7/site-packages')
+sys.path.append('/usr/local/lib/python3.7/dist-packages')
+sys.path.append('/usr/lib/python3/dist-packages')
+sys.path.append("/home/varun/Drone_RL/blender_scripts")
+sys.path.append('/home/varun/.local/lib/python3.7/site-packages/cv2')
+from RL import *
+run_rl()
+
+from image import * 
+
+
+# Revati system
+
 import sys
 sys.path.append('/usr/lib/python3.7')
 sys.path.append('/usr/lib/python3.7/lib-dynload')
@@ -7,8 +37,12 @@ sys.path.append('/home/revati/.local/lib/python3.7/site-packages/cv2')
 sys.path.append('/usr/lib/python3/dist-packages')
 sys.path.append("/home/revati/CMSC818B/Drone_RL/blender_scripts")
 from RL import *
+run_rl()
+
 
 from image import * 
-
-
 run_rl()
+
+
+
+
