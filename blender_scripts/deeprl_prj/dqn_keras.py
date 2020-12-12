@@ -485,8 +485,9 @@ class DQNAgent:
 
         is_training = False
         if self.load_network:
-            self.q_network.load_weights(self.load_network_path)
-            print("Load network from:", self.load_network_path)
+          print("Load network from:", self.load_network_path)
+          self.q_network.load_weights(self.load_network_path)
+            
 
         state, depth = env.reset()
         # if monitor:

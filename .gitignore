@@ -4,5 +4,6 @@ __pycache__
 **/RL_exp
 **/Misc
 **/CheckPoints
+**/Results
 **/blender-2.91.0-linux64
 **.weights

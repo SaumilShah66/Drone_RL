@@ -42,7 +42,6 @@ sys.path.append('/usr/lib/python3/dist-packages')
 sys.path.append("/home/varun/Drone_RL/blender_scripts")
 sys.path.append('/usr/local/lib/python3.7/dist-packages/cv2')
 sys.path.append('/usr/local/lib/python3.7/dist-packages/matplotlib')
-
 from RL import *
 run_rl()
 
