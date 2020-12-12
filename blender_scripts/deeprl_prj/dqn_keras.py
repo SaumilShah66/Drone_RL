@@ -341,7 +341,7 @@ class DQNAgent:
               if not burn_in:
                 if not file_open:
                   file_open = True
-                  f_episode = open ("/home/varun/Drone_RL/blender_scripts/Results"+str(idx_episode)+'.txt','a')
+                  f_episode = open ("/home/varun/Drone_RL/blender_scripts/Results/"+str(idx_episode)+'.txt','a')
 
                 if(policy == 0):
                   policy_str = "Exploration"

@@ -55,7 +55,7 @@ class Environment():
 		self.previous_actions.remove(self.previous_actions[0])
 		self.previous_actions.append(action)
 		self.take_action(action)
-		directory = self.root_dir + "/Episode_" + str(self.episode)
+		directory = self.root_dir + "/Episode"
 		render_and_save_(directory, True)
 		if(self.count == 1):
 			self.current_image = cv2.imread(directory+"/Camera_reset.png")
@@ -111,7 +111,7 @@ class Environment():
 		self.updateEpisode()
 		self.cam.location = self.initial_position
 		self.cam.rotation_euler = self.initial_orientation
-		directory = self.root_dir + "/Episode_" + str(self.episode)
+		directory = self.root_dir + "/Episode"
 		render_and_save_(directory)
 		self.current_image = cv2.imread(directory+"/Camera_reset.png")
 		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
