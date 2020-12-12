@@ -12,7 +12,7 @@ import csv
 import time
 import datetime
 import h5py
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def exr2numpy(exr, maxvalue=1.,normalize=True):
     """ converts 1-channel exr-data to 2D numpy arrays """                                                                    
@@ -45,11 +45,11 @@ def main():
     depth_data_1 = exr2numpy("../Camera_360_1/Image0001.exr", maxvalue=15, normalize=False)
 
     # fig = plt.figure()
-    fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
-    ax1.imshow(depth_data_0)
-    ax2.imshow(depth_data_1)
+    # fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+    # ax1.imshow(depth_data_0)
+    # ax2.imshow(depth_data_1)
     # plt.colorbar()
-    plt.show()    
+    # plt.show()    
 
 if __name__ == '__main__':
     main()

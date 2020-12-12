@@ -88,7 +88,7 @@ def run_rl():
     parser.add_argument('--num_frames', default=4, type=int, help='Number of frames to feed to Q-Network')
     parser.add_argument('--frame_width', default=84, type=int, help='Resized frame width')
     parser.add_argument('--frame_height', default=84, type=int, help='Resized frame height')
-    parser.add_argument('--replay_memory_size', default=50000, type=int, help='Number of replay memory the agent uses for training')
+    parser.add_argument('--replay_memory_size', default=5000, type=int, help='Number of replay memory the agent uses for training')
     parser.add_argument('--target_update_freq', default=200, type=int, help='The frequency with which the target network is updated')
     parser.add_argument('--train_freq', default=1, type=int, help='The frequency of actions wrt Q-network update')
     parser.add_argument('--save_freq', default=500, type=int, help='The frequency with which the network is saved')

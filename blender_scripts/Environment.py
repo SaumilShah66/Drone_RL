@@ -32,7 +32,7 @@ def render_and_save_(path_dir, step = False):
 
 class Environment():
 	def __init__(self, initial_position = Vector((0,0,5)), initial_orientation = Euler((1.57,0,0),'XYZ'),
-				 root_dir = "/home/revati/RL_exp", rotation_step=30, forward_step = 0.5):
+				 root_dir = "/home/varun/Drone_RL/RL_exp", rotation_step=30, forward_step = 0.5):
 		self.cam = bpy.data.objects['Camera']
 		self.count=0
 		self.initial_position = initial_position

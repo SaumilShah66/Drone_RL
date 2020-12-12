@@ -304,7 +304,7 @@ class DQNAgent:
         step_reward = 0.0
         step_reward_raw = 0.0
         # with open ('reward.txt','a') as f:
-        with open ('/home/varun/Drone_RL/blender_scripts/deeprl_prj/Results/reward.txt','a') as f:
+        with open ('/home/varun/Drone_RL/blender_scripts/Results/reward.txt','a') as f:
           file_open = False
           for t in range(self.num_burn_in + num_iterations):
               # os.system("echo iteration --> %s, episode --> %s"%(t, idx_episode))
@@ -341,7 +341,7 @@ class DQNAgent:
               if not burn_in:
                 if not file_open:
                   file_open = True
-                  f_episode = open ("/home/varun/Drone_RL/blender_scripts/deeprl_prj/Results"+str(idx_episode)+'.txt','a')
+                  f_episode = open ("/home/varun/Drone_RL/blender_scripts/Results"+str(idx_episode)+'.txt','a')
 
                 if(policy == 0):
                   policy_str = "Exploration"
