@@ -62,18 +62,20 @@ class Environment():
 		else:
 			self.current_image = cv2.imread(directory+"/Camera.png")
 		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
-		reward = self.calculate_reward()
+		reward = self.calculate_reward(action)
 		collide = self.checkCollision()
 		if collide:
 			reward=-10
 		cv2.imwrite(directory+"/depth.png", self.current_depth_numpy)
 		return self.current_image, self.current_depth_numpy, reward, collide
 
-	def calculate_reward(self):
+	def calculate_reward(self, action):
 		if not 2 in self.previous_actions:
-			reward = -1
+			reward = -2	# when only rotating at same position for last 4 actions
+		elif action == 2:
+			reward = 1	# when moving forward
 		else:
-			reward = 1
+			reward = 4	# when turning
 		return reward
 
 	def checkCollision(self):

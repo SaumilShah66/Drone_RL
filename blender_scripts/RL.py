@@ -6,6 +6,7 @@ import os
 # from gym import wrappers
 from Environment import *
 import tensorflow as tf
+import glob
 from future.builtins import input
 
 # >>>>>>>>>>>>>>>>>>>>>>>>
@@ -71,6 +72,7 @@ def get_output_folder(args, parent_dir, env_name, task_name):
     os.makedirs(parent_dir+'/videos/')
     os.makedirs(parent_dir+'/images/')
     os.makedirs(parent_dir+'/losses/')
+    os.makedirs(parent_dir+'/Results/')
     return parent_dir
 
 def run_rl():
@@ -89,7 +91,7 @@ def run_rl():
     parser.add_argument('--frame_width', default=84, type=int, help='Resized frame width')
     parser.add_argument('--frame_height', default=84, type=int, help='Resized frame height')
     parser.add_argument('--replay_memory_size', default=5000, type=int, help='Number of replay memory the agent uses for training')
-    parser.add_argument('--target_update_freq', default=200, type=int, help='The frequency with which the target network is updated')
+    parser.add_argument('--target_update_freq', default=20, type=int, help='The frequency with which the target network is updated')
     parser.add_argument('--train_freq', default=1, type=int, help='The frequency of actions wrt Q-network update')
     parser.add_argument('--save_freq', default=500, type=int, help='The frequency with which the network is saved')
     parser.add_argument('--eval_freq', default=200, type=int, help='The frequency with which the policy is evlauted')    
@@ -129,18 +131,17 @@ def run_rl():
     print(">>>> #actions: ", num_actions)
 
     dqn = DQNAgent(args, num_actions)
-    if args.train:
-        print(">> Training mode.")
-        dqn.fit(env, args.num_samples, args.max_episode_length)
+    print(">> Training mode.")
+    dqn.fit(env, args.num_samples, args.max_episode_length)
     # else:
     #     print(">> Evaluation mode.")
     #     dqn.evaluate(env, args.output, args.num_episodes_at_test, 0, args.max_episode_length, True)
 
 
-ef run_rl_eval():
+def run_eval():
     parser = argparse.ArgumentParser(description='Run DQN on Atari Breakout')
     # parser.add_argument('--env', default='QuadCopter-v4', help='Atari env name')
-    parser.add_argument('-o', '--output', default='/home/varun/Drone_RL/RL_exp_test/log/', help='Directory to save data to')
+    parser.add_argument('-o', '--output', default='/home/varun/Drone_RL/RL_exp/log/', help='Directory to save data to')
     parser.add_argument('--seed', default=0, type=int, help='Random seed')
     parser.add_argument('--gamma', default=0.99, type=float, help='Discount factor')
     parser.add_argument('--batch_size', default=32, type=int, help='Minibatch size')
@@ -159,10 +160,10 @@ ef run_rl_eval():
     parser.add_argument('--eval_freq', default=200, type=int, help='The frequency with which the policy is evlauted')    
     parser.add_argument('--num_burn_in', default=1000, type=int, help='Number of steps to populate the replay memory before training starts')
     parser.add_argument('--load_network', default=True, action='store_true', help='Load trained mode')
-    parser.add_argument('--load_network_path', default='/home/varun/Drone_RL/RL_exp_test/qnet98.h5', help='the path to the trained mode file')
+    parser.add_argument('--load_network_path', default='/home/varun/Drone_RL/RL_exp/log/', help='the path to the trained mode file')
     parser.add_argument('--net_mode', default='dqn', help='choose the mode of net, can be linear, dqn, duel')
     parser.add_argument('--max_episode_length', default = 1000, type=int, help = 'max length of each episode')
-    parser.add_argument('--num_episodes_at_test', default = 20, type=int, help='Number of episodes the agent plays at test')
+    parser.add_argument('--num_episodes_at_test', default = 2, type=int, help='Number of episodes the agent plays at test')
     parser.add_argument('--ddqn', default=False, dest='ddqn', action='store_true', help='enable ddqn')
     parser.add_argument('--train', default=False, dest='train', action='store_true', help='Train mode')
     parser.add_argument('--test', dest='train', action='store_false', help='Test mode')
@@ -176,7 +177,12 @@ ef run_rl_eval():
     parser.add_argument('--bidir', default=False, dest='bidir', action='store_true', help='enable two layer bidirectional lstm')
 
     args = parser.parse_args()
-    args.output = get_output_folder(args, args.output, "blender_env", args.task_name)
+    # args.output = get_output_folder(args, args.output, "blender_env", args.task_name)
+    folders = glob.glob(args.load_network_path + 'blender*')
+    folders.sort()
+    folders = folders[-1]
+    args.load_network_path = folders + '/last.h5'
+    args.output = folders
 
     # env = gym.make(args.env)
     env = Environment()
@@ -193,12 +199,8 @@ ef run_rl_eval():
     print(">>>> #actions: ", num_actions)
 
     dqn = DQNAgent(args, num_actions)
-    if args.train:
-        print(">> Training mode.")
-        dqn.fit(env, args.num_samples, args.max_episode_length)
-    else:
-        print(">> Evaluation mode.")
-        dqn.evaluate(env, args.output, args.num_episodes_at_test, 0, args.max_episode_length, True)
+    print(">> Evaluation mode.")
+    dqn.evaluate(env, args.output, args.num_episodes_at_test, 0, args.max_episode_length, True)
 
 
 if __name__ == '__main__':

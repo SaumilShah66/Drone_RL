@@ -304,7 +304,7 @@ class DQNAgent:
         step_reward = 0.0
         step_reward_raw = 0.0
         # with open ('reward.txt','a') as f:
-        with open ('/home/varun/Drone_RL/blender_scripts/Results/reward.txt','a') as f:
+        with open (self.output_path + '/Results/reward.txt','w') as f:
           file_open = False
           for t in range(self.num_burn_in + num_iterations):
               # os.system("echo iteration --> %s, episode --> %s"%(t, idx_episode))
@@ -341,7 +341,7 @@ class DQNAgent:
               if not burn_in:
                 if not file_open:
                   file_open = True
-                  f_episode = open ("/home/varun/Drone_RL/blender_scripts/Results/"+str(idx_episode)+'.txt','a')
+                  f_episode = open (self.output_path + "/Results/"+str(idx_episode)+'.txt','w')
 
                 if(policy == 0):
                   policy_str = "Exploration"
@@ -440,7 +440,7 @@ class DQNAgent:
                       # here we use hard target update as default
                       self.target_network.set_weights(self.q_network.get_weights())
                   if t % self.save_freq == 0:
-                      self.save_model(idx_episode)
+                      self.save_model(t)
 
                       loss_array = np.asarray(losses_list)
                       print (loss_array.shape) # 10 element vector
@@ -468,6 +468,7 @@ class DQNAgent:
     def save_model(self, idx_episode):
         safe_path = self.output_path + "/qnet" + str(idx_episode) + ".h5"
         self.q_network.save_weights(safe_path)
+        self.q_network.save_weights(self.output_path + "/last.h5")
         print("Network at", idx_episode, "saved to:", safe_path)
 
     def evaluate(self, env, output_path, num_episodes, eval_count, max_episode_length=None, monitor=False):
@@ -497,32 +498,35 @@ class DQNAgent:
         episode_frames = 0
         episode_reward = np.zeros(num_episodes)
         t = 0
+        with open (output_path + '/Results/reward_eval.txt','w') as f:
+          file_open = False
+          while eval_count < num_episodes:
+              t += 1
+              if(monitor):
+                  vw.write(state)
 
-        while idx_episode <= num_episodes:
-            t += 1
-            if(monitor):
-                vw.write(state)
-
-            # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
-            action_state = np.dstack((state/255.0, depth/60.0))
-            action,policy,q_values = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
-            state, depth, reward, done = env.step(action)
-            episode_frames += 1
-            episode_reward[idx_episode-1] += reward 
-            if episode_frames > max_episode_length:
-                done = True
-            if done:
-                print("Eval: time %d, episode %d, length %d, reward %.0f" %
-                    (t, idx_episode, episode_frames, episode_reward[idx_episode-1]))
-                eval_count += 1
-                save_scalar(eval_count, 'eval/eval_episode_raw_reward', episode_reward[idx_episode-1], self.writer)
-                save_scalar(eval_count, 'eval/eval_episode_raw_length', episode_frames, self.writer)
-                sys.stdout.flush()
-                state, depth = env.reset()
-                episode_frames = 0
-                idx_episode += 1
-                # self.atari_processor.reset()
-                # self.history_processor.reset()
+              # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
+              action_state = np.dstack((state/255.0, depth/60.0))
+              action,policy,q_values = self.select_action(action_state, is_training, policy_type = 'GreedyEpsilonPolicy')
+              state, depth, reward, done = env.step(action)
+              output_episode ="Eval Count: "+str(eval_count)+" Episode: "+str(idx_episode)+", Action Index:"+str(action)+", q-values:"+str(q_values)+", Reward:"+str(reward)
+              f.write(output_episode+'\n')
+              episode_frames += 1
+              episode_reward[eval_count] += reward 
+              if episode_frames > max_episode_length:
+                  done = True
+              if done:
+                  print("Eval: time %d, episode %d, length %d, reward %.0f" %
+                      (t, idx_episode, episode_frames, episode_reward[eval_count]))
+                  save_scalar(eval_count, 'eval/eval_episode_raw_reward', episode_reward[eval_count], self.writer)
+                  save_scalar(eval_count, 'eval/eval_episode_raw_length', episode_frames, self.writer)
+                  sys.stdout.flush()
+                  eval_count += 1
+                  state, depth = env.reset()
+                  episode_frames = 0
+                  idx_episode = 0
+                  # self.atari_processor.reset()
+                  # self.history_processor.reset()
 
         reward_mean = np.mean(episode_reward)
         reward_std = np.std(episode_reward)
