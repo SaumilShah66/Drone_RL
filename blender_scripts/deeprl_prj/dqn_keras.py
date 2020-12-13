@@ -350,7 +350,7 @@ class DQNAgent:
                 else:
                   policy_str = "N/A"
 
-                output_episode ="Episode:"+str(idx_episode)+"Policy:"+policy_str+", Action Index:"+str(action)+",Q values:"+str(q_values)+", Reward:"+str(reward)
+                output_episode ="Episode:"+str(idx_episode)+", Policy:"+policy_str+", Action Index:"+str(action)+", Q values:"+str(q_values)+", Reward:"+str(reward)
                 f_episode.write(output_episode+'\n')
               # processed_next_state is a normalized [0,1] float32 grayscale image of size (84,84)
               # processed_next_state = self.atari_processor.process_state_for_network(state)
