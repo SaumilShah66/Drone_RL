@@ -38,6 +38,7 @@ def rewardsPlot(path):
         values = line.split(",")
         y.append(float(values[0]))
         x.append(int(values[1]))
+    f.close()
     plt.plot(x, y) 
   
     # naming the x axis 
@@ -62,10 +63,10 @@ def irewardsPlot(pathr):
         f = open(pathr+"/"+str(count)+".txt", "r")
         Lines = f.readlines()
         for line in Lines: 
-            # print("Line{}: {}".format(count, line.strip())) 
             values = line.split(",")
             x.append(int(values[0].split(":")[1]))
             y.append(float(values[len(values)-1].split(":")[1]))
+        f.close()
         count= count+1
         
     # print(x,y)
