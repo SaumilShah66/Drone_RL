@@ -7,3 +7,7 @@ __pycache__
 **/Results
 **/blender-2.91.0-linux64
 **.weights
+
+README.md
+**/__pycache__/
+**/blender_init.txt

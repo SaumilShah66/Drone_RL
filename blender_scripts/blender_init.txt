@@ -1,94 +1,11 @@
-############# install python3.7 ###############
-# pip3 install --upgrade pip
-# https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/
-
-########### python3 default change ##########
-# NOTE: in below page, you might need to change the path from "/usr/bin" to "/usr/lib". But check as per the system. And select manual mode python3.7 in last step
-# https://tech.serhatteker.com/post/2019-09/upgrade-python37-on-ubuntu18/
-
-########## reinstall tensorflow-gpu #########
-# pip3 install -I tensorflow-gpu==1.15.4
-	or
-# pip3 install --upgrade --force-reinstall tensorflow-gpu==1.15.4 
-
-
-
-############## No module 'apt_pkg'###########
-# apt-get install python3-apt
-# cd /usr/lib/python3/dist-packages/
-# ln -s apt_pkg.cpython-36m-x86_64-linux-gnu.so apt_pkg.so
-
-############# openEXR ################
-# sudo apt-get install python3.7-dev
-# sudo apt-get install openexr
-# sudo apt-get install libopenexr-dev
-# pip3 install -U pillow
-# pip3 install semver
-# apt-get install libz-dev
-# pip3 install openexr
-
-
-########## update gcc to version 9 ####################
-########## cannot import name '_gi' from 'gi''#########
-# ln -s /usr/lib/python3/dist-packages/gi/_gi.cpython-{36m,37m}-x86_64-linux-gnu.so
-# add-apt-repository ppa:ubuntu-toolchain-r/test
-# apt update
-# apt install g++-9
-# update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
-
-
-# pip3 install 'h5py<3.0.0'
-
-
-
-# Varun System Docker
-
 import sys
+sys.path.append("/home/sneha/uncertainty/Drone_RL/blender_scripts")
+
 sys.path.append('/usr/lib/python3.7')
 sys.path.append('/usr/lib/python3.7/lib-dynload')
+sys.path.append('/home/sneha/.local/lib/python3.7/site-packages') 
 sys.path.append('/usr/local/lib/python3.7/dist-packages')
-sys.path.append('/usr/lib/python3/dist-packages')
-sys.path.append("/home/varun/Drone_RL/blender_scripts")
 sys.path.append('/usr/local/lib/python3.7/dist-packages/cv2')
-sys.path.append('/usr/local/lib/python3.7/dist-packages/matplotlib')
-from RL import *
-
-run_eval()
-run_rl()
-
-
-
-# Varun system
-
-import sys
-sys.path.append('/usr/lib/python3.7')
-sys.path.append('/usr/lib/python3.7/lib-dynload')
-sys.path.append('/home/varun/.local/lib/python3.7/site-packages')
-sys.path.append('/usr/local/lib/python3.7/dist-packages')
 sys.path.append('/usr/lib/python3/dist-packages')
-sys.path.append("/home/varun/Drone_RL/blender_scripts")
-sys.path.append('/home/varun/.local/lib/python3.7/site-packages/cv2')
 from RL import *
 run_rl()
-
-from image import * 
-
-
-# Revati system
-
-import sys
-sys.path.append('/usr/lib/python3.7')
-sys.path.append('/usr/lib/python3.7/lib-dynload')
-sys.path.append('/home/revati/.local/lib/python3.7/site-packages')
-sys.path.append('/usr/local/lib/python3.7/dist-packages')
-sys.path.append('/home/revati/.local/lib/python3.7/site-packages/cv2')
-sys.path.append('/usr/lib/python3/dist-packages')
-sys.path.append("/home/revati/CMSC818B/Drone_RL/blender_scripts")
-from RL import *
-run_rl()
-
-
-from image import * 
-run_rl()
-
-
