@@ -7,7 +7,11 @@
 # https://tech.serhatteker.com/post/2019-09/upgrade-python37-on-ubuntu18/
 
 ########## reinstall tensorflow-gpu #########
-# pip3 install -I tensorflow-gpu==1.15.4 
+# pip3 install -I tensorflow-gpu==1.15.4
+	or
+# pip3 install --upgrade --force-reinstall tensorflow-gpu==1.15.4 
+
+
 
 ############## No module 'apt_pkg'###########
 # apt-get install python3-apt
