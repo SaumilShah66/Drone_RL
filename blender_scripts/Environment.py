@@ -32,7 +32,7 @@ def render_and_save_(path_dir, step = False):
 
 class Environment():
 	def __init__(self, initial_position = Vector((0,1,5)), initial_orientation = Euler((1.57,0,0),'XYZ'),
-				 root_dir = "/home/varun/Drone_RL/RL_exp", rotation_step=30, forward_step = 0.5):
+				 root_dir = "/home/varun/Drone_RL/Drone_RL/RL_exp", rotation_step=30, forward_step = 0.5):
 		self.cam = bpy.data.objects['Camera']
 		self.count=0
 		self.initial_position = initial_position
@@ -47,10 +47,10 @@ class Environment():
 		self.current_image = None
 		self.current_depth_numpy = None
 		self.threshold = 0.7 # Meters
-		self.previous_actions = [2,2,2,2]
+		self.previous_actions = [2,0,0,2]
 		
 	def step(self, action):
-		## 0 -- Left || 1 -- Right || 2 -- Forward
+		## 2 -- Left || 1 -- Right || 0 -- Forward
 		self.count += 1
 		self.previous_actions.remove(self.previous_actions[0])
 		self.previous_actions.append(action)
@@ -70,12 +70,18 @@ class Environment():
 		return self.current_image, self.current_depth_numpy, reward, collide
 
 	def calculate_reward(self, action):
-		if not 2 in self.previous_actions:
-			reward = -2	# when only rotating at same position for last 4 actions
-		elif action == 2:
-			reward = 1	# when moving forward
+		past_act = np.array(self.previous_actions)
+		if np.all(past_act == 0):
+			reward = -1
+		elif np.any(past_act != 0):
+			reward = -3
 		else:
-			reward = 4	# when turning
+			reward = 1	# when turning
+
+		# if not 0 in self.previous_actions:
+		# 	reward = -2	# when only rotating at same position for last 4 actions
+		# elif action == 0:
+		# 	reward = 1	# when moving forward
 		return reward
 
 	def checkCollision(self):
@@ -98,13 +104,13 @@ class Environment():
 		self.episode += 1
 
 	def take_action(self, action):
-		## 0 -- Left || 1 -- Right || 2 -- Forward
+		## 2 -- Left || 1 -- Right || 0 -- Forward
 		old_yaw = self.cam.rotation_euler.z
-		if action==0:
+		if action==2:
 			self.cam.rotation_euler.z -= self.rotation_step
 		if action==1:
 			self.cam.rotation_euler.z += self.rotation_step
-		if action==2:
+		if action==0:
 			self.cam.location.x += self.forward_step*np.cos(self.pi + self.cam.rotation_euler.z)
 			self.cam.location.y += self.forward_step*np.sin(self.pi + self.cam.rotation_euler.z)
 		

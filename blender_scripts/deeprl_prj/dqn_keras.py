@@ -120,7 +120,8 @@ class DQNAgent:
         self.history_processor = HistoryPreprocessor(args.num_frames - 1)
         self.atari_processor = AtariPreprocessor()
         self.memory = ReplayMemory(args)
-        self.policy = LinearDecayGreedyEpsilonPolicy(args.initial_epsilon, args.final_epsilon, args.exploration_steps)
+        # self.policy = LinearDecayGreedyEpsilonPolicy(args.initial_epsilon, args.final_epsilon, args.exploration_steps)
+        self.policy = GreedyEpsilonPolicy(0.5)
         self.gamma = args.gamma
         self.target_update_freq = args.target_update_freq
         self.num_burn_in = args.num_burn_in
@@ -206,9 +207,13 @@ class DQNAgent:
         if is_training:
             if kwargs['policy_type'] == 'UniformRandomPolicy':
                 return UniformRandomPolicy(self.num_actions).select_action(),-1,q_values
-            else:
+            elif kwargs['policy_type'] == 'LinearDecayGreedyEpsilonPolicy':
                 # linear decay greedy epsilon policy
                 result = self.policy.select_action(q_values, is_training) 
+                return result[0],result[1],q_values
+            elif kwargs['policy_type'] == 'GreedyEpsilonPolicy':
+                # linear decay greedy epsilon policy
+                result = self.policy.select_action(q_values) 
                 return result[0],result[1],q_values
         else:
             # return GreedyEpsilonPolicy(0.05).select_action(q_values)
@@ -320,10 +325,13 @@ class DQNAgent:
               # print("depth" , depth.shape)
               action_state = np.dstack((state/255.0, depth/60.0))
               # action_state = self.history_processor.process_state_for_network(self.atari_processor.process_state_for_network(state))
-              policy_type = "UniformRandomPolicy" if burn_in else "LinearDecayGreedyEpsilonPolicy"
               
+              # policy_type = "UniformRandomPolicy" if burn_in else "LinearDecayGreedyEpsilonPolicy"
+              policy_type = "UniformRandomPolicy" if burn_in else "GreedyEpsilonPolicy"
+
               # q-val is a row vector (used in select_action function as an output of the DQN)
               # action contains the index value of the selected q-val i.e. action id
+              
               action,policy,q_values = self.select_action(action_state, is_training, policy_type = policy_type)
               
               # processed_state is a uint8 grayscale image of size (84,84)
@@ -350,7 +358,7 @@ class DQNAgent:
                 else:
                   policy_str = "N/A"
 
-                output_episode ="Episode:"+str(idx_episode)+"Policy:"+policy_str+", Action Index:"+str(action)+",Q values:"+str(q_values)+", Reward:"+str(reward)
+                output_episode ="Episode: "+str(idx_episode)+", Policy: "+policy_str+", Action Index: "+str(action)+", q values: "+str(q_values)+", Reward:"+str(reward)
                 f_episode.write(output_episode+'\n')
               # processed_next_state is a normalized [0,1] float32 grayscale image of size (84,84)
               # processed_next_state = self.atari_processor.process_state_for_network(state)
@@ -461,7 +469,7 @@ class DQNAgent:
                   #     episode_reward_mean, episode_reward_std, eval_count = self.evaluate(env, 1, eval_count, max_episode_length, True)
                   #     save_scalar(t, 'eval/eval_episode_reward_mean', episode_reward_mean, self.writer)
                   #     save_scalar(t, 'eval/eval_episode_reward_std', episode_reward_std, self.writer)
-
+        f.close()
         self.save_model(idx_episode)
 
 

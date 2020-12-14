@@ -1,37 +1,3 @@
-
-Skip to content
-Pull requests
-Issues
-Marketplace
-Explore
-@varunasthana92
-SaumilShah66 /
-Drone_RL
-
-2
-0
-
-    0
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-
-    Insights
-
-Drone_RL/blender_scripts/plot.py /
-@snehanyk05
-snehanyk05 Slight changes to close file
-Latest commit e91409d 5 hours ago
-History
-1 contributor
-85 lines (68 sloc) 2.16 KB
-#!/usr/bin/env python
-
 import argparse
 import os
 import glob
@@ -49,17 +15,26 @@ def checkPlot():
     folders = glob.glob(args.rewards + 'blender*')
     folders.sort()
     folders = folders[-1]
-    args.rewards = folders + '/Results/reward.txt'
+
+    print("Press 1 for rewards plot of train, 2 for eval:")
+    inp1 = input()
+
+    if(inp1 == '1'):
+        args.rewards = folders + '/Results/reward.txt'
+        print("Press 1 for rewards plot and 2 for intermediate rewards plot:")
+        inp = input()
+    elif(inp1 == '2'):
+        args.rewards = folders + '/Results/reward_eval.txt'
+        inp = '1'
+
     args.irewards = folders + '/Results/'
     
     print("==== Args used:")
     print(args)
-    print("Press 1 for rewards plot and 2 for intermediate rewards plot:")
-    x = input()
 
-    if(x == '1'):
+    if(inp == '1'):
         rewardsPlot(args.rewards)
-    elif(x == '2'):
+    elif(inp == '2'):
         irewardsPlot(args.irewards)
 
 def rewardsPlot(path):
@@ -100,7 +75,8 @@ def irewardsPlot(pathr):
     while(path.exists(pathr + str(count)+".txt")):
         f = open(pathr + str(count)+".txt", "r")
         Lines = f.readlines()
-        for line in Lines: 
+        for line in Lines:
+            # line = output_episode ="Episode: "+str(idx_episode)+", Policy: "+policy_str+", Action Index: "+str(action)+", q values: "+str(q_values)+", Reward:"+str(reward)
             values = line.split(",")
             x.append(int(values[0].split(":")[1]))
             y.append(float(values[len(values)-1].split(":")[1]))

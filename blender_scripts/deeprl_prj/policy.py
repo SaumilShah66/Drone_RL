@@ -84,6 +84,7 @@ class GreedyEpsilonPolicy(Policy):
     """
     def __init__(self, epsilon):
         self.epsilon = epsilon
+        self.step = 0
 
     def select_action(self, q_values, **kwargs):
         """Run Greedy-Epsilon for the given Q-values.
