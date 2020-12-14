@@ -162,7 +162,7 @@ def run_eval():
     parser.add_argument('--load_network', default=True, action='store_true', help='Load trained mode')
     parser.add_argument('--load_network_path', default='/home/varun/Drone_RL/Drone_RL/RL_exp/log/', help='the path to the trained mode file')
     parser.add_argument('--net_mode', default='dqn', help='choose the mode of net, can be linear, dqn, duel')
-    parser.add_argument('--max_episode_length', default = 1000, type=int, help = 'max length of each episode')
+    parser.add_argument('--max_episode_length', default = 500, type=int, help = 'max length of each episode')
     parser.add_argument('--num_episodes_at_test', default = 1, type=int, help='Number of episodes the agent plays at test')
     parser.add_argument('--ddqn', default=False, dest='ddqn', action='store_true', help='enable ddqn')
     parser.add_argument('--train', default=False, dest='train', action='store_true', help='Train mode')

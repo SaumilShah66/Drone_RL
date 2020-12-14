@@ -32,7 +32,7 @@ def render_and_save_(path_dir, step = False):
 
 class Environment():
 	def __init__(self, initial_position = Vector((0,0,5)), initial_orientation = Euler((1.57,0,0),'XYZ'),
-				 root_dir = "/home/varun/Drone_RL/Drone_RL/RL_exp", rotation_step=30, forward_step = 0.2):
+				 root_dir = "/home/varun/Drone_RL/Drone_RL/RL_exp", rotation_step=15, forward_step = 0.2):
 		self.cam = bpy.data.objects['Camera']
 		self.count=0
 		self.initial_position = initial_position
@@ -62,7 +62,7 @@ class Environment():
 		else:
 			self.current_image = cv2.imread(directory+"/Camera.png")
 		self.current_depth_numpy = exr2numpy(directory+"/Image0001.exr", maxvalue=100, normalize=False)
-		reward = self.calculate_reward(action)
+		reward = self.calculate_reward_good(action)
 		collide = self.checkCollision()
 		if collide:
 			reward=-10
