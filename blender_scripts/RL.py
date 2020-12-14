@@ -97,7 +97,7 @@ def run_rl():
     parser.add_argument('--eval_freq', default=200, type=int, help='The frequency with which the policy is evlauted')    
     parser.add_argument('--num_burn_in', default=1000, type=int, help='Number of steps to populate the replay memory before training starts')
     parser.add_argument('--load_network', default=False, action='store_true', help='Load trained mode')
-    parser.add_argument('--load_network_path', default='/home/varun/Drone_RL/RL_exp_test/qnet1111.h5', help='the path to the trained mode file')
+    parser.add_argument('--load_network_path', default='/home/varun/Drone_RL/RL_exp/log/', help='the path to the trained mode file')
     parser.add_argument('--net_mode', default='dqn', help='choose the mode of net, can be linear, dqn, duel')
     parser.add_argument('--max_episode_length', default = 1000, type=int, help = 'max length of each episode')
     parser.add_argument('--num_episodes_at_test', default = 20, type=int, help='Number of episodes the agent plays at test')

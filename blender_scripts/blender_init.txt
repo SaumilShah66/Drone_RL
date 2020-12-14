@@ -9,7 +9,7 @@
 ########## reinstall tensorflow-gpu #########
 # pip3 install -I tensorflow-gpu==1.15.4
 	or
-# pip3 install --upgrade --force-reinstall tensorflow-gpu==1.15.4 
+# pip3 install --no-deps --upgrade --force-reinstall tensorflow-gpu==1.15.4 
 
 
 
