@@ -1,0 +1,21 @@
+Episode: 15, Policy: Exploration, Action Index: 2, q values: [[194.16649 190.37502 189.73575]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 0, q values: [[221.40004 216.90875 215.55482]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 0, q values: [[196.9867  192.85318 191.61646]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 0, q values: [[194.03944 190.02316 188.85757]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[189.48427 185.54227 184.77026]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 0, q values: [[186.36533 182.54486 181.80783]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[183.29335 179.6118  178.92145]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[180.06566 176.51448 175.85509]], Reward:-3
+Episode: 15, Policy: Exploration, Action Index: 1, q values: [[175.37935 172.1779  171.86613]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 2, q values: [[145.94391 143.43669 143.23909]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[175.37935 172.1779  171.86613]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[172.19221 169.11513 168.82437]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 1, q values: [[168.41614 165.80638 165.70685]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 1, q values: [[157.84784 155.9611  155.47423]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 0, q values: [[153.58548 150.82326 151.41025]], Reward:1
+Episode: 15, Policy: Exploration, Action Index: 2, q values: [[150.79999 148.21388 148.81436]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[144.2366  142.46606 142.37297]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[140.59787 138.76788 138.80275]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[136.56726 134.80792 134.83781]], Reward:1
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[132.22948 130.60295 130.6709 ]], Reward:-3
+Episode: 15, Policy: Exploitation, Action Index: 0, q values: [[130.03189 128.70564 129.25058]], Reward:-10

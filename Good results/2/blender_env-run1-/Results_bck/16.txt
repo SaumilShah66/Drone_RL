@@ -1,0 +1,85 @@
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[191.39186 188.70404 189.93434]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[218.16284 214.9237  215.7002 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[194.09744 191.07736 191.73611]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[192.29707 190.15967 191.3478 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[189.6128  187.53183 188.74455]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[185.6712  183.13124 184.22095]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[182.2798  179.80728 180.93387]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[180.7968  179.29915 180.52328]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[185.13383 184.10414 185.38084]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[166.34836 165.20465 166.71812]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[185.13383 184.10414 185.38084]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[182.19362 181.51637 182.91187]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[178.55116 177.92284 179.32849]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[177.00049 177.05698 178.66858]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[173.39777 173.52248 175.14868]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[176.86938 177.11674 178.5087 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[174.9614  175.89507 177.4863 ]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[172.3926  173.36328 174.9407 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[185.83733 186.47594 187.75621]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[173.32938 174.96571 176.56984]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[174.1089  175.07425 176.54193]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[170.80945 171.83165 173.29828]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[167.30414 168.35896 169.81886]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[168.98561 171.23769 172.71309]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[168.01053 169.55888 170.96088]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[168.98561 171.23769 172.71309]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[181.29385 183.21318 184.58911]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[169.20836 171.92177 173.21677]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[168.16887 170.17215 171.3954 ]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[169.20836 171.92177 173.21677]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[181.4761  183.88666 185.06966]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[244.06499 247.12952 247.90314]], Reward:-3
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[237.48775 240.69226 241.7568 ]], Reward:-3
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[247.49101 250.40822 251.30345]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[244.76337 247.64601 248.55186]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[221.64886 224.57051 226.45656]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[217.50818 220.42575 222.3447 ]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[231.85884 235.17389 235.97658]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[246.07751 249.40587 249.69861]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[181.39803 183.6768  184.58034]], Reward:-3
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[198.3393  202.23029 202.6863 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[197.56195 201.48917 201.96965]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[197.66681 201.644   202.10199]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[171.89946 174.48338 174.72621]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[167.0734  169.18205 169.44579]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[167.42029 170.16893 170.57393]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[167.0734  169.18205 169.44579]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[166.34718 168.7573  168.81578]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 1, q values: [[166.03123 167.80737 167.72748]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 1, q values: [[170.82544 173.06418 172.95204]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 1, q values: [[194.33301 197.72397 197.5785 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[157.11404 157.97656 158.90948]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[150.39928 151.27718 152.27846]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[187.93788 190.61284 190.57039]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[168.90929 170.46358 170.54749]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 1, q values: [[165.60883 165.95245 165.94789]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[168.83156 169.70389 169.72855]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 1, q values: [[165.60883 165.95245 165.94789]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[168.83156 169.70389 169.72855]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[166.31084 165.7468  165.84645]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[169.57736 169.51907 169.65125]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[166.46014 166.47331 166.62979]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 2, q values: [[163.38005 163.46835 163.65508]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[162.29416 161.22801 161.17291]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[158.7555  157.76353 157.7394 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[155.2826  154.3763  154.39297]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[158.27356 157.83595 157.88832]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[190.92773 190.01204 190.07881]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[159.64557 158.52321 158.50684]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[156.65106 155.62733 155.62488]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[188.33699 187.44719 187.53789]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[158.391   156.78665 156.63841]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[155.52025 154.01262 153.89624]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[152.83989 150.79272 150.67023]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[149.31857 147.37427 147.3026 ]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[147.61906 145.31651 144.90414]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[143.78458 141.63641 141.26642]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[148.54187 146.69276 146.2934 ]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[146.24364 144.47247 144.08904]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 1, q values: [[145.48062 143.36276 142.6455 ]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[177.65926 175.08286 174.18721]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[176.16052 173.62027 172.71275]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 0, q values: [[174.65897 172.13968 171.23499]], Reward:1
+Episode: 16, Policy: Exploration, Action Index: 2, q values: [[172.34715 170.1233  168.52167]], Reward:1
+Episode: 16, Policy: Exploitation, Action Index: 0, q values: [[143.3544  141.56953 140.2058 ]], Reward:-10
