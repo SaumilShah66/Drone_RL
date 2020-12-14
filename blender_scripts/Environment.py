@@ -31,8 +31,8 @@ def render_and_save_(path_dir, step = False):
 	    # bpy.context.scene.render.filepath = path_dir
 
 class Environment():
-	def __init__(self, initial_position = Vector((0,1,5)), initial_orientation = Euler((1.57,0,0),'XYZ'),
-				 root_dir = "/home/varun/Drone_RL/Drone_RL/RL_exp", rotation_step=30, forward_step = 0.5):
+	def __init__(self, initial_position = Vector((0,0,5)), initial_orientation = Euler((1.57,0,0),'XYZ'),
+				 root_dir = "/home/varun/Drone_RL/Drone_RL/RL_exp", rotation_step=15, forward_step = 0.2):
 		self.cam = bpy.data.objects['Camera']
 		self.count=0
 		self.initial_position = initial_position
@@ -72,9 +72,11 @@ class Environment():
 	def calculate_reward(self, action):
 		past_act = np.array(self.previous_actions)
 		if np.all(past_act == 0):
+			reward = -0.5
+		elif not np.any(past_act == 0):
 			reward = -1
-		elif np.any(past_act != 0):
-			reward = -3
+		elif action == 0:
+			reward = 0.75	# when moving forward
 		else:
 			reward = 1	# when turning
 
@@ -82,6 +84,19 @@ class Environment():
 		# 	reward = -2	# when only rotating at same position for last 4 actions
 		# elif action == 0:
 		# 	reward = 1	# when moving forward
+		return reward
+
+	def calculate_reward_good(self, action):
+		past_act = np.array(self.previous_actions)
+		past_act = past_act - past_act[0]
+		if np.all(past_act == 0):
+			reward = -3
+		# if not 0 in self.previous_actions:
+		# 	reward = -2	# when only rotating at same position for last 4 actions
+		# elif action == 0:
+		# 	reward = 1	# when moving forward
+		else:
+			reward = 1	# when turning
 		return reward
 
 	def checkCollision(self):
