@@ -87,16 +87,16 @@ class Environment():
 		return reward
 
 	def calculate_reward_good(self, action):
-		past_act = np.array(self.previous_actions)
-		past_act = past_act - past_act[0]
-		if np.all(past_act == 0):
-			reward = -3
-		# if not 0 in self.previous_actions:
-		# 	reward = -2	# when only rotating at same position for last 4 actions
-		# elif action == 0:
-		# 	reward = 1	# when moving forward
-		else:
-			reward = 1	# when turning
+		# past_act = np.array(self.previous_actions)
+		# past_act = past_act - past_act[0]
+		# if np.all(past_act == 0):
+		# 	reward = -3
+		# # if not 0 in self.previous_actions:
+		# # 	reward = -2	# when only rotating at same position for last 4 actions
+		# # elif action == 0:
+		# # 	reward = 1	# when moving forward
+		# else:
+		reward = 1	# when turning
 		return reward
 
 	def checkCollision(self):
